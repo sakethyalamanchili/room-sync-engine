@@ -222,3 +222,13 @@ Known limitations:
 - Pub/Sub channels are shared across Redis db numbers, so running the tests while the app is open sends a few test events to open tabs.
 - Grafana runs with anonymous admin. That's only OK for a local demo.
 - I haven't tested beyond 30 users or tuned Postgres. Next steps would be PgBouncer, more workers, and a read replica for the grid query.
+
+## How this was built
+
+I used an AI coding assistant (Claude Code) to write most of the code.
+
+- **My part:** the design and the spec. That covers the three-layer approach to double bookings (idempotency key, Redis lock, Postgres exclusion constraint), the schema, the API, the metrics, and the test plan, including the 30-user race test. I also made the product and deployment calls (the FAU EECS focus, free single-server setup) and reviewed the running app.
+- **The AI's part:** implementing it, running the tests and load tests, and fixing what they turned up.
+
+The most useful thing that came out of this was the deadlock described above: the Redis-down test found it, and the advisory-lock fix came out of that. I can walk through any part of the code.
+
