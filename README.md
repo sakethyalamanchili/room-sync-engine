@@ -106,7 +106,7 @@ bash scripts/smoke_test.sh
 
 ## Deploying (free, one server)
 
-I run it on an Oracle Cloud "Always Free" ARM VM with the same compose setup plus Caddy for HTTPS. Everything in the stack has ARM images.
+There's a production compose file for running this on a single server, e.g. a free Oracle Cloud "Always Free" ARM VM, with Caddy in front for HTTPS. I tested it end to end locally on `https://localhost`. Everything in the stack has ARM images.
 
 What's different in `docker-compose.prod.yml`:
 
@@ -130,7 +130,7 @@ Steps:
 
 Updating later: `git pull && docker compose -f docker-compose.prod.yml up -d --build`. Migrations run on startup.
 
-Oracle can reclaim Always Free VMs that sit almost idle for a week. Upgrading the account to Pay As You Go generally avoids that, and you're still not charged as long as you stay inside the free limits.
+Heads up on Oracle's free tier: the A1 shape is often "out of capacity" in busy regions like Ashburn, so creating the VM can take a lot of retries. Oracle can also reclaim Always Free VMs that sit almost idle for a week. Upgrading the account to Pay As You Go helps with both, and you're still not charged as long as you stay inside the free limits.
 
 ## Observability
 
