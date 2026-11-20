@@ -1,0 +1,34 @@
+{$DOMAIN} {
+	encode gzip
+
+	# whole site behind one shared password (anyone with it can book/cancel, there's no real auth)
+	basic_auth {
+		{$BASIC_AUTH_USER} {$BASIC_AUTH_HASH}
+	}
+
+	# prometheus scrapes this over the internal network, no need to expose it.
+	# (has to be a handle block, a bare respond runs after the catch-all handle below)
+	handle /metrics {
+		respond 404
+	}
+	handle /api/* {
+		reverse_proxy backend:8000
+	}
+	handle /docs* {
+		reverse_proxy backend:8000
+	}
+	handle /openapi.json {
+		reverse_proxy backend:8000
+	}
+	handle /health {
+		reverse_proxy backend:8000
+	}
+	handle /grafana* {
+		reverse_proxy grafana:3000
+	}
+	handle {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}
